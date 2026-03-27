@@ -1,3 +1,6 @@
 <Solution>
-  <Project Path="GerenciamentoAtivos/GerenciamentoAtivos.csproj" />
+  <Project Path="GerenciamentoAtivos.Data/GerenciamentoAtivos.Data.csproj" />
+  <Project Path="GerenciamentoAtivos.Domain/GerenciamentoAtivos.Domain.csproj" />
+  <Project Path="GerenciamentoAtivos.Service/GerenciamentoAtivos.Service.csproj" />
+  <Project Path="GerenciamentoAtivos/GerenciamentoAtivos.API.csproj" />
 </Solution>
