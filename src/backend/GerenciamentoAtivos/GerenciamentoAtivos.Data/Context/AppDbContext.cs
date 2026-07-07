@@ -6,7 +6,9 @@ namespace GerenciamentoAtivos.Data.Context
     public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
     {
         public DbSet<Ativo> Ativos { get; set; }
-        
+        public DbSet<Segmento> Segmentos { get; set; }
+        public DbSet<Administradora> Administradora { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

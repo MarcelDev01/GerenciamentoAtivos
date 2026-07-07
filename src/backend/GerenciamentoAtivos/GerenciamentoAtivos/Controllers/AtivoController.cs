@@ -10,6 +10,7 @@ namespace GerenciamentoAtivos.API.Controllers
     {
         private readonly IAtivoRepository _ativoRepository = ativoRepository;
 
+        // 1. GET: api/ativos (Listar todos os FIIs)
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -17,6 +18,7 @@ namespace GerenciamentoAtivos.API.Controllers
             return Ok(ativos);
         }
 
+        // 2. GET: api/ativos/{id} (Buscar FII por ID)
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetById(Guid id)
         {
@@ -28,18 +30,17 @@ namespace GerenciamentoAtivos.API.Controllers
             return Ok(ativo);
         }
 
+        // 3. POST: api/ativos (Cadastrar um FII)
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] Ativo novoAtivo)
         {
             if (novoAtivo == null)
                 return BadRequest();
 
-            // Lembra que NÃO setamos CreatedAt nem IsActive na mão? 
-            // O nosso AppDbContext vai fazer isso sozinho no SaveChanges!
+            // O EF Core vai salvar no banco e o C# vai calcular os campos com [NotMapped] na hora do retorno!
             await _ativoRepository.AddAsync(novoAtivo);
             await _ativoRepository.SaveChangesAsync();
 
-            // Retorna o status 201 (Created) e mostra onde o recurso foi criado
             return CreatedAtAction(nameof(GetById), new { id = novoAtivo.Id }, novoAtivo);
         }
     }
