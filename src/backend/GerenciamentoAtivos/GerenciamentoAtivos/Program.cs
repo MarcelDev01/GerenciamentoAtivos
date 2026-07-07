@@ -1,6 +1,7 @@
 using GerenciamentoAtivos.Data.Context;
 using GerenciamentoAtivos.Data.Repositories;
 using GerenciamentoAtivos.Domain.Interfaces;
+using GerenciamentoAtivos.Service;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +22,8 @@ builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 builder.Services.AddScoped<IAtivoRepository, AtivoRepository>();
 builder.Services.AddScoped<ISegmentoRepository, SegmentoRepository>();
 builder.Services.AddScoped<IAdministradoraRepository, AdministradoraRepository>();
+
+builder.Services.AddApplicationServices();
 
 var app = builder.Build();
 
