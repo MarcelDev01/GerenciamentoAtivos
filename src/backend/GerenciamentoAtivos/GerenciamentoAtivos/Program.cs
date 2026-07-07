@@ -1,4 +1,6 @@
 using GerenciamentoAtivos.Data.Context;
+using GerenciamentoAtivos.Data.Repositories;
+using GerenciamentoAtivos.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,8 +12,13 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
+
+// Registra o repositório genérico
+builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+
+// Registra o repositório específicos
+builder.Services.AddScoped<IAtivoRepository, AtivoRepository>();
 
 var app = builder.Build();
 
