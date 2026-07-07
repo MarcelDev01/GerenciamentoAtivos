@@ -19,6 +19,8 @@ builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 
 // Registra o repositório específicos
 builder.Services.AddScoped<IAtivoRepository, AtivoRepository>();
+builder.Services.AddScoped<ISegmentoRepository, SegmentoRepository>();
+builder.Services.AddScoped<IAdministradoraRepository, AdministradoraRepository>();
 
 var app = builder.Build();
 

@@ -10,16 +10,14 @@ namespace GerenciamentoAtivos.API.Controllers
     {
         private readonly IAtivoRepository _ativoRepository = ativoRepository;
 
-        // 1. GET: api/ativos (Listar todos os FIIs)
-        [HttpGet]
+        [HttpGet("Ativos/")]
         public async Task<IActionResult> GetAll()
         {
             var ativos = await _ativoRepository.GetAllAsync();
             return Ok(ativos);
         }
 
-        // 2. GET: api/ativos/{id} (Buscar FII por ID)
-        [HttpGet("{id:guid}")]
+        [HttpGet("AtivoByID/{id:guid}")]
         public async Task<IActionResult> GetById(Guid id)
         {
             var ativo = await _ativoRepository.GetByIdAsync(id);
@@ -30,8 +28,7 @@ namespace GerenciamentoAtivos.API.Controllers
             return Ok(ativo);
         }
 
-        // 3. POST: api/ativos (Cadastrar um FII)
-        [HttpPost]
+        [HttpPost("CriarAtivo/")]
         public async Task<IActionResult> Create([FromBody] Ativo novoAtivo)
         {
             if (novoAtivo == null)

@@ -8,7 +8,7 @@ namespace GerenciamentoAtivos.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<Ativo> builder)
         {
-            builder.ToTable("tbAtivos");
+            builder.ToTable("Ativos");
 
             builder.HasKey(a => a.Id);
 
