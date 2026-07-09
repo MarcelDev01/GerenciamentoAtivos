@@ -1,4 +1,4 @@
-﻿using GerenciamentoAtivos.Domain.Services;
+﻿using GerenciamentoAtivos.Service.Interfaces;
 using GerenciamentoAtivos.Service.Services;
 using Microsoft.Extensions.DependencyInjection;
 

@@ -7,7 +7,7 @@ namespace GerenciamentoAtivos.Domain.Models
     public abstract class BaseEntity
     {
         public Guid Id { get; set; } = Guid.NewGuid();
-        public bool Active { get; set; }
+        public bool Active { get; set; } = true;
         public DateTime Created { get; set; } = DateTime.Now;
         public DateTime? Updated { get; set; }
     }

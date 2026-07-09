@@ -1,9 +1,6 @@
-﻿using GerenciamentoAtivos.Data.Repositories;
-using GerenciamentoAtivos.Domain.Interfaces;
-using GerenciamentoAtivos.Domain.Models;
-using GerenciamentoAtivos.Domain.Services;
-using GerenciamentoAtivos.Service.Services;
+﻿using GerenciamentoAtivos.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using GerenciamentoAtivos.Service.DTO_s.Segmento;
 
 namespace GerenciamentoAtivos.API.Controllers
 {
@@ -32,23 +29,26 @@ namespace GerenciamentoAtivos.API.Controllers
         }
 
         [HttpPost("CriarSegmento/")]
-        public async Task<IActionResult> Create([FromBody] Segmento data)
+        public async Task<IActionResult> Create([FromBody] CriarSegmentoDto data)
         {
             if (data == null)
                 return BadRequest();
 
-            await _segmentoService.Create(data);
+            var segmento = await _segmentoService.Create(data);
 
-            return Ok();
+            return Ok(segmento);
         }
 
         [HttpPatch("AtualizarSegmento/")]
-        public async Task<IActionResult> Update([FromBody] Segmento data)
+        public async Task<IActionResult> Update([FromBody] AtualizarSegmentoDto data)
         {
             if (data == null)
                 return BadRequest();
 
-            await _segmentoService.Update(data);
+            var result = await _segmentoService.Update(data);
+
+            if (!result)
+                return NotFound(new { mensagem = "Segmento não encontrado para atualização." });
 
             return Ok();
         }
@@ -58,10 +58,10 @@ namespace GerenciamentoAtivos.API.Controllers
         {
             var result = await _segmentoService.DeleteById(id);
 
-            if (result == null)
-                return NotFound(new { mensagem = "Erro ao excluir a segmento." });
+            if (!result)
+                return NotFound(new { mensagem = "Segmento não encontrado para exclusão." });
 
-            return Ok(result);
+            return Ok();
         }
     }
 }

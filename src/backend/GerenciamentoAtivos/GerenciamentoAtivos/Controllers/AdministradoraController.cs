@@ -1,9 +1,5 @@
-﻿using GerenciamentoAtivos.Data.Repositories;
-using GerenciamentoAtivos.Domain.Interfaces;
-using GerenciamentoAtivos.Domain.Models;
-using GerenciamentoAtivos.Domain.Services;
-using GerenciamentoAtivos.Service.Services;
-using Microsoft.AspNetCore.Http.HttpResults;
+﻿using GerenciamentoAtivos.Service.DTO_s.Administradora;
+using GerenciamentoAtivos.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GerenciamentoAtivos.API.Controllers
@@ -33,23 +29,26 @@ namespace GerenciamentoAtivos.API.Controllers
         }
 
         [HttpPost("CriarAdministradora/")]
-        public async Task<IActionResult> Create([FromBody] Administradora data)
+        public async Task<IActionResult> Create([FromBody] CriarAdministradoraDto data)
         {
             if (data == null)
                 return BadRequest();
 
-            await _administradoraService.Create(data);
+            var administradora = await _administradoraService.Create(data);
 
-            return Ok();
+            return Ok(administradora);
         }
 
         [HttpPatch("AtualizarAdministradora/")]
-        public async Task<IActionResult> Update([FromBody] Administradora data)
+        public async Task<IActionResult> Update([FromBody] AtualizarAdministradoraDto data)
         {
             if (data == null)
                 return BadRequest();
 
-            await _administradoraService.Update(data);
+            var result = await _administradoraService.Update(data);
+
+            if (!result)
+                return NotFound(new { mensagem = "Administradora não encontrada para atualização." });
 
             return Ok();
         }
@@ -59,8 +58,8 @@ namespace GerenciamentoAtivos.API.Controllers
         {
             var result = await _administradoraService.DeleteById(id);
 
-            if (result == null)
-                return NotFound(new { mensagem = "Erro ao excluir a administradora." });
+            if (!result)
+                return NotFound(new { mensagem = "Administradora não encontrada para exclusão." });
 
             return Ok(result);
         }

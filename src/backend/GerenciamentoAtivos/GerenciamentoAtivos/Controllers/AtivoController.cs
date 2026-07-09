@@ -1,6 +1,7 @@
-﻿using GerenciamentoAtivos.Domain.Interfaces;
-using GerenciamentoAtivos.Domain.Models;
-using GerenciamentoAtivos.Domain.Services;
+﻿using GerenciamentoAtivos.Domain.Models;
+using GerenciamentoAtivos.Service.DTO_s.Ativo;
+using GerenciamentoAtivos.Service.Interfaces;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GerenciamentoAtivos.API.Controllers
@@ -30,23 +31,26 @@ namespace GerenciamentoAtivos.API.Controllers
         }
 
         [HttpPost("CriarAtivo/")]
-        public async Task<IActionResult> Create([FromBody] Ativo data)
+        public async Task<IActionResult> Create([FromBody] CriarAtivoDto data)
         {
             if (data == null)
                 return BadRequest();
 
-            await _ativoService.Create(data);
+            var ativo = await _ativoService.Create(data);
 
-            return Ok();
+            return Ok(ativo);
         }
 
         [HttpPatch("AtualizarAtivo/")]
-        public async Task<IActionResult> Update([FromBody] Ativo data)
+        public async Task<IActionResult> Update([FromBody] AtualizarAtivoDto data)
         {
             if (data == null)
                 return BadRequest();
 
-            await _ativoService.Update(data);
+            var result = await _ativoService.Update(data);
+
+            if (!result)
+                return NotFound(new { mensagem = "Segmento não encontrado para atualização." });
 
             return Ok();
         }
@@ -56,8 +60,8 @@ namespace GerenciamentoAtivos.API.Controllers
         {
             var result = await _ativoService.DeleteById(id);
 
-            if (result == null)
-                return NotFound(new { mensagem = "Erro ao excluir o ativo." });
+            if (!result)
+                return NotFound(new { mensagem = "Ativo não encontrado para exclusão." });
 
             return Ok(result);
         }
