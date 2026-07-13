@@ -2,7 +2,7 @@
   <div class="min-h-screen flex flex-row">
     <aside class="w-64 bg-slate-900 text-slate-200 flex flex-col p-4 border-r border-slate-800">
       <div class="text-xl font-bold text-white mb-8 px-2 flex items-center gap-2">
-        <span>💼 AtivosManager</span>
+        <span>💼 Investimentos</span>
       </div>
       
       <nav class="flex-1 flex flex-col gap-1">
