@@ -3,6 +3,7 @@ import PrimeVue from 'primevue/config'
 import Aura from '@primevue/themes/aura' // Tema moderno do PrimeVue
 import './assets/index.css' // Importa o Tailwind que criamos no Passo 2
 import App from './App.vue'
+import router from './router'
 
 const app = createApp(App)
 
@@ -12,5 +13,7 @@ app.use(PrimeVue, {
         preset: Aura
     }
 })
+
+app.use(router)
 
 app.mount('#app')
