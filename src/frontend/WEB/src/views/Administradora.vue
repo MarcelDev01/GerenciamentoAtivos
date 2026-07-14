@@ -4,47 +4,85 @@
     <Toast />
 
     <!-- Cabeçalho da Página -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-6 rounded-xl border border-slate-200 shadow-xs">
+    <div
+      class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-6 rounded-xl border border-slate-200 shadow-xs"
+    >
       <div>
-        <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Gerenciamento de Administradoras</h1>
+        <h1 class="text-2xl font-bold text-slate-900 tracking-tight">
+          Gerenciamento de Administradoras
+        </h1>
         <p class="text-sm text-slate-500 mt-1">Tela de controle das administradoras de fundos.</p>
       </div>
-      <Button class="bg-blue-600 hover:bg-blue-700 text-white font-medium border-none shadow-sm px-4 py-2 rounded-lg shrink-0 flex items-center gap-2">
-        <i class="mdi mdi-plus text-lg"></i>
-        <span>Nova Administradora</span>
-      </Button>
+
+      <BaseButton label="Nova Administradora" icon="mdi mdi-plus" />
     </div>
 
     <!-- Tabela de Dados (PrimeVue DataTable) -->
-    <div class="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
-      <DataTable
-        :value="[]"
-        stripedRows 
-        responsiveLayout="scroll"
-        class="p-datatable-sm text-sm"
-        placeholder="Nenhuma administradora encontrada."
-      >
-        <Column field="nomeFantasia" header="Nome Fantasia" sortable class="font-medium text-slate-700"></Column>
-        <Column field="cnpjEmpresa" header="Cnpj Empresa" class="text-slate-500"></Column>
-        <Column field="cnpjDono" header="Cnpj Dono" class="text-slate-500"></Column>
-        <Column field="ativo" header="Status" class="text-slate-500"></Column>
-        
-        <!-- Coluna de Ações (Editar / Excluir) -->
-        <Column header="Ações" class="w-32 text-center" headerClass="text-center">
-          <template #body="slotProps">
-            <div class="flex items-center justify-center gap-2">
-              <Button 
-                icon="pi pi-pencil" 
-                class="p-button-rounded p-button-text text-amber-600 hover:bg-amber-50! w-8 h-8 p-0" 
-              />
-              <Button 
-                icon="pi pi-trash" 
-                class="p-button-rounded p-button-text text-red-600 hover:bg-red-50! w-8 h-8 p-0" 
-              />
-            </div>
-          </template>
-        </Column>
-      </DataTable>
-    </div>
+    <BaseTable
+      :items="lstAdministradoras"
+      :columns="colunasAdministradoras"
+      @edit="editar"
+      @delete="excluir"
+      :hasActions="false"
+    >
+      <template #col-ativo="{ row }">
+        <Badge
+          :value="row.ativo ? 'Ativo' : 'Inativo'"
+          :severity="row.ativo ? 'success' : 'danger'"
+          class="font-semibold px-3 py-1"
+        />
+      </template>
+    </BaseTable>
   </div>
 </template>
+
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
+//import { useToast } from 'primevue/usetoast'
+import BaseButton from '../components/BaseButton.vue'
+import BaseTable from '../components/BaseTable.vue'
+import { administradoraService, type AdministradoraDto } from '../services/Administradora.ts'
+import Badge from 'primevue/badge'
+
+//const toast = useToast()
+const lstAdministradoras = ref<AdministradoraDto[]>([])
+const loading = ref(false)
+
+const getAdministradoras = async () => {
+  loading.value = true
+  try {
+    const result = await administradoraService.getAll()
+    lstAdministradoras.value = result
+    console.log(lstAdministradoras.value)
+  } catch (error) {
+    console.error('Erro ao buscar administradoras:', error)
+    // toast.add({
+    //   severity: 'error',
+    //   summary: 'Erro',
+    //   detail: 'Não foi possível carregar as administradoras.',
+    //   life: 3000,
+    // })
+  } finally {
+    loading.value = false
+  }
+}
+
+// Defina quais colunas essa tela precisa mostrar
+const colunasAdministradoras = [
+  { field: 'nomeFantasia', header: 'Nome Fantasia' },
+  { field: 'cnpjEmpresa', header: 'CNPJ Empresa' },
+  { field: 'cnpjFundo', header: 'CNPJ Dono' },
+  { field: 'ativo', header: 'Status' },
+]
+
+const editar = (item: any) => {
+  console.log('Editando administradora:', item)
+}
+const excluir = (item: any) => {
+  console.log('Excluindo administradora:', item)
+}
+
+onMounted(() => {
+  getAdministradoras()
+})
+</script>
