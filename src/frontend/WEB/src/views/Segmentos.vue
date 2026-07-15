@@ -1,9 +1,7 @@
 <template>
   <div class="p-6 max-w-7xl mx-auto space-y-6">
-    <!-- Componente global para exibir mensagens de sucesso/erro (Toast) -->
     <Toast />
 
-    <!-- Cabeçalho da Página -->
     <div
       class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-6 rounded-xl border border-slate-200 shadow-xs"
     >
@@ -14,10 +12,9 @@
         </p>
       </div>
 
-      <BaseButton label="Novo Segmento" icon="mdi mdi-plus" />
+      <BaseButton label="Novo Segmento" icon="mdi mdi-plus" @click="openNewSegmento" />
     </div>
 
-    <!-- Tabela de Dados (PrimeVue DataTable) -->
     <BaseTable
       :items="lstSegmentos"
       :columns="colunasSegmentos"
@@ -33,20 +30,37 @@
         />
       </template>
     </BaseTable>
+
+    <SegmentoDialog
+      v-model:visible="modalAberto"
+      :segmento-data="segmentoSelecionado"
+      :loading="salvandoDados"
+      @save="saveSegmento"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-//import { useToast } from 'primevue/usetoast'
 import BaseButton from '../components/BaseButton.vue'
 import BaseTable from '../components/BaseTable.vue'
-import { segmentoService, type SegmentoDto } from '../services/SegmentoService.ts'
+import { segmentoService } from '../services/SegmentoService.ts'
 import Badge from 'primevue/badge'
+import SegmentoDialog from '../components/Dialog/SegmentoDialog.vue'
 
-//const toast = useToast()
+import type { SegmentoDto, SegmentoForm } from '../services/SegmentoService.ts'
+
 const lstSegmentos = ref<SegmentoDto[]>([])
 const loading = ref(false)
+const modalAberto = ref(false)
+const segmentoSelecionado = ref<SegmentoDto | null>(null)
+const salvandoDados = ref(false)
+
+// Defina quais colunas essa tela precisa mostrar
+const colunasSegmentos = [
+  { field: 'nome', header: 'Nome' },
+  { field: 'ativo', header: 'Status' },
+]
 
 const getSegmentos = async () => {
   loading.value = true
@@ -55,28 +69,47 @@ const getSegmentos = async () => {
     lstSegmentos.value = result
   } catch (error) {
     console.error('Erro ao buscar segmentos:', error)
-    // toast.add({
-    //   severity: 'error',
-    //   summary: 'Erro',
-    //   detail: 'Não foi possível carregar os segmentos.',
-    //   life: 3000,
-    // })
   } finally {
     loading.value = false
   }
 }
 
-// Defina quais colunas essa tela precisa mostrar
-const colunasSegmentos = [
-  { field: 'nome', header: 'Nome' },
-  { field: 'ativo', header: 'Status' },
-]
+const openNewSegmento = () => {
+  segmentoSelecionado.value = null
+  modalAberto.value = true
+}
 
 const editar = (item: any) => {
-  console.log('Editando segmento:', item)
+  segmentoSelecionado.value = { ...item }
+  modalAberto.value = true
 }
+
 const excluir = (item: any) => {
-  console.log('Excluindo segmento:', item)
+  console.log('Excluir segmento:', item)
+}
+
+const saveSegmento = async (dados: SegmentoForm) => {
+  salvandoDados.value = true
+  try {
+    if (dados.id) {
+      await segmentoService.update({
+        id: dados.id,
+        nome: dados.nome,
+        ativo: dados.ativo,
+      })
+    } else {
+      await segmentoService.create({
+        nome: dados.nome,
+      })
+    }
+
+    modalAberto.value = false
+    await getSegmentos()
+  } catch (error) {
+    console.error('Erro ao salvar segmento:', error)
+  } finally {
+    salvandoDados.value = false
+  }
 }
 
 onMounted(() => {

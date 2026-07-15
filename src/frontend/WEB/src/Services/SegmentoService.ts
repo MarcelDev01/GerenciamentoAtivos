@@ -18,6 +18,13 @@ export interface AtualizarSegmentoDto {
   nome: string
   ativo: boolean
 }
+
+export interface SegmentoForm {
+  id?: string | null
+  nome: string
+  ativo: boolean
+}
+
 //#endregion
 
 export const segmentoService = {
