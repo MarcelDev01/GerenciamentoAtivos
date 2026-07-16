@@ -14,7 +14,7 @@
         <p class="text-sm text-slate-500 mt-1">Tela de controle das administradoras de fundos.</p>
       </div>
 
-      <BaseButton label="Nova Administradora" icon="mdi mdi-plus" />
+      <BaseButton label="Nova Administradora" icon="mdi mdi-plus" size="x-small" />
     </div>
 
     <!-- Tabela de Dados (PrimeVue DataTable) -->

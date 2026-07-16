@@ -12,7 +12,12 @@
         </p>
       </div>
 
-      <BaseButton label="Novo Segmento" icon="mdi mdi-plus" @click="openNewSegmento" />
+      <BaseButton
+        label="Novo Segmento"
+        icon="mdi mdi-plus"
+        @click="openNewSegmento"
+        size="x-small"
+      />
     </div>
 
     <BaseTable

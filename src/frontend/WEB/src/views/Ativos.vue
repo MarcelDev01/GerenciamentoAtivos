@@ -12,7 +12,7 @@
         <p class="text-sm text-slate-500 mt-1">Tela de controle de ativos (FIIs, Ações, etc.).</p>
       </div>
 
-      <BaseButton label="Novo Ativo" icon="mdi mdi-plus" />
+      <BaseButton label="Novo Ativo" icon="mdi mdi-plus" size="x-small" />
     </div>
 
     <!-- Tabela de Dados (PrimeVue DataTable) -->
