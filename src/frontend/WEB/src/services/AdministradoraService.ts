@@ -24,6 +24,14 @@ export interface AtualizarAdministradoraDto {
   cnpjDono: string
   ativo: boolean
 }
+
+export interface AdministradoraForm {
+  id?: string | null
+  nomeFantasia: string
+  cnpjEmpresa: string
+  cnpjDono: string
+  ativo: boolean
+}
 //#endregion
 
 export const administradoraService = {

@@ -54,5 +54,5 @@ withDefaults(defineProps<Props>(), {
 })
 
 // Define o v-model de forma nativa no Vue 3
-const modelValue = defineModel<string>({ default: '' })
+const modelValue = defineModel<any>()
 </script>

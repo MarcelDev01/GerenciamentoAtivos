@@ -12,6 +12,7 @@ namespace GerenciamentoAtivos.Service
             services.AddScoped<IAtivoService, AtivoService>();
             services.AddScoped<ISegmentoService, SegmentoService>();
             services.AddScoped<IAdministradoraService, AdministradoraService>();
+            services.AddScoped<ILookupService, LookupService>();
 
             return services;
         }

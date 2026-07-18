@@ -15,8 +15,8 @@
       <BaseButton
         label="Novo Segmento"
         icon="mdi mdi-plus"
-        @click="openNewSegmento"
         size="x-small"
+        @click="openNewSegmento"
       />
     </div>
 
@@ -49,23 +49,17 @@
 import { ref, onMounted } from 'vue'
 import BaseButton from '../components/BaseButton.vue'
 import BaseTable from '../components/BaseTable.vue'
-import { segmentoService } from '../services/SegmentoService.ts'
+import { segmentoService } from '@/services/SegmentoService.ts'
 import Badge from 'primevue/badge'
 import SegmentoDialog from '../components/Dialog/SegmentoDialog.vue'
 
-import type { SegmentoDto, SegmentoForm } from '../services/SegmentoService.ts'
+import type { SegmentoDto, SegmentoForm } from '@/services/SegmentoService.ts'
 
 const lstSegmentos = ref<SegmentoDto[]>([])
 const loading = ref(false)
 const modalAberto = ref(false)
 const segmentoSelecionado = ref<SegmentoDto | null>(null)
 const salvandoDados = ref(false)
-
-// Defina quais colunas essa tela precisa mostrar
-const colunasSegmentos = [
-  { field: 'nome', header: 'Nome' },
-  { field: 'ativo', header: 'Status' },
-]
 
 const getSegmentos = async () => {
   loading.value = true
@@ -78,6 +72,12 @@ const getSegmentos = async () => {
     loading.value = false
   }
 }
+
+// Defina quais colunas essa tela precisa mostrar
+const colunasSegmentos = [
+  { field: 'nome', header: 'Nome' },
+  { field: 'ativo', header: 'Status' },
+]
 
 const openNewSegmento = () => {
   segmentoSelecionado.value = null

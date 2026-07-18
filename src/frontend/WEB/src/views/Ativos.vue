@@ -12,7 +12,7 @@
         <p class="text-sm text-slate-500 mt-1">Tela de controle de ativos (FIIs, Ações, etc.).</p>
       </div>
 
-      <BaseButton label="Novo Ativo" icon="mdi mdi-plus" size="x-small" />
+      <BaseButton label="Novo Ativo" icon="mdi mdi-plus" size="x-small" @click="openNewAtivo" />
     </div>
 
     <!-- Tabela de Dados (PrimeVue DataTable) -->
@@ -31,20 +31,31 @@
         />
       </template>
     </BaseTable>
+
+    <AtivoDialog
+      v-model:visible="modalAberto"
+      :ativo-data="ativoSelecionado"
+      :loading="salvandoDados"
+      @save="saveAtivo"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-//import { useToast } from 'primevue/usetoast'
+import { ativoService } from '@/services/AtivoService.ts'
 import BaseButton from '../components/BaseButton.vue'
 import BaseTable from '../components/BaseTable.vue'
-import { ativoService, type AtivoDto } from '../services/AtivoService.ts'
 import Badge from 'primevue/badge'
+import AtivoDialog from '../components/Dialog/AtivoDialog.vue'
 
-//const toast = useToast()
+import { type AtivoDto, type AtivoForm } from '@/services/AtivoService.ts'
+
 const lstAtivos = ref<AtivoDto[]>([])
 const loading = ref(false)
+const modalAberto = ref(false)
+const ativoSelecionado = ref<AtivoDto | null>(null)
+const salvandoDados = ref(false)
 
 const getAtivos = async () => {
   loading.value = true
@@ -53,12 +64,6 @@ const getAtivos = async () => {
     lstAtivos.value = result
   } catch (error) {
     console.error('Erro ao buscar ativos:', error)
-    // toast.add({
-    //   severity: 'error',
-    //   summary: 'Erro',
-    //   detail: 'Não foi possível carregar os ativos.',
-    //   life: 3000,
-    // })
   } finally {
     loading.value = false
   }
@@ -74,11 +79,53 @@ const colunasAtivos = [
   { field: 'ativo', header: 'Status' },
 ]
 
+const openNewAtivo = () => {
+  ativoSelecionado.value = null
+  modalAberto.value = true
+}
+
 const editar = (item: any) => {
   console.log('Editando ativo:', item)
 }
+
 const excluir = (item: any) => {
   console.log('Excluindo ativo:', item)
+}
+
+const saveAtivo = async (dados: AtivoForm) => {
+  salvandoDados.value = true
+  try {
+    if (dados.id) {
+      await ativoService.update({
+        id: dados.id,
+        segmentoId: dados.segmentoId,
+        administradoraId: dados.administradoraId,
+        codigoFii: dados.codigoFii,
+        qtdeCotas: dados.qtdeCotas,
+        rendimentoUnitario: dados.rendimentoUnitario,
+        precoCota: dados.precoCota,
+        valorPatrimonial: dados.valorPatrimonial,
+        ativo: dados.ativo,
+      })
+    } else {
+      await ativoService.create({
+        segmentoId: dados.segmentoId,
+        administradoraId: dados.administradoraId,
+        codigoFii: dados.codigoFii,
+        qtdeCotas: dados.qtdeCotas,
+        rendimentoUnitario: dados.rendimentoUnitario,
+        precoCota: dados.precoCota,
+        valorPatrimonial: dados.valorPatrimonial,
+      })
+    }
+
+    modalAberto.value = false
+    await getAtivos()
+  } catch (error) {
+    console.error('Erro ao salvar ativo:', error)
+  } finally {
+    salvandoDados.value = false
+  }
 }
 
 onMounted(() => {

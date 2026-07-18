@@ -14,7 +14,12 @@
         <p class="text-sm text-slate-500 mt-1">Tela de controle das administradoras de fundos.</p>
       </div>
 
-      <BaseButton label="Nova Administradora" icon="mdi mdi-plus" size="x-small" />
+      <BaseButton
+        label="Nova Administradora"
+        icon="mdi mdi-plus"
+        size="x-small"
+        @click="openNewAdministradora"
+      />
     </div>
 
     <!-- Tabela de Dados (PrimeVue DataTable) -->
@@ -33,20 +38,34 @@
         />
       </template>
     </BaseTable>
+
+    <AdministradoraDialog
+      v-model:visible="modalAberto"
+      :administradora-data="administradoraSelecionada"
+      :loading="salvandoDados"
+      @save="saveAdministradora"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-//import { useToast } from 'primevue/usetoast'
+import { administradoraService } from '@/services/AdministradoraService.ts'
 import BaseButton from '../components/BaseButton.vue'
 import BaseTable from '../components/BaseTable.vue'
-import { administradoraService, type AdministradoraDto } from '../services/Administradora.ts'
 import Badge from 'primevue/badge'
+import AdministradoraDialog from '../components/Dialog/AdministradoraDialog.vue'
 
-//const toast = useToast()
+import {
+  type AdministradoraForm,
+  type AdministradoraDto,
+} from '../services/AdministradoraService.ts'
+
 const lstAdministradoras = ref<AdministradoraDto[]>([])
 const loading = ref(false)
+const modalAberto = ref(false)
+const administradoraSelecionada = ref<AdministradoraDto | null>(null)
+const salvandoDados = ref(false)
 
 const getAdministradoras = async () => {
   loading.value = true
@@ -56,12 +75,6 @@ const getAdministradoras = async () => {
     console.log(lstAdministradoras.value)
   } catch (error) {
     console.error('Erro ao buscar administradoras:', error)
-    // toast.add({
-    //   severity: 'error',
-    //   summary: 'Erro',
-    //   detail: 'Não foi possível carregar as administradoras.',
-    //   life: 3000,
-    // })
   } finally {
     loading.value = false
   }
@@ -75,11 +88,45 @@ const colunasAdministradoras = [
   { field: 'ativo', header: 'Status' },
 ]
 
+const openNewAdministradora = () => {
+  administradoraSelecionada.value = null
+  modalAberto.value = true
+}
+
 const editar = (item: any) => {
   console.log('Editando administradora:', item)
 }
+
 const excluir = (item: any) => {
   console.log('Excluindo administradora:', item)
+}
+
+const saveAdministradora = async (dados: AdministradoraForm) => {
+  salvandoDados.value = true
+  try {
+    if (dados.id) {
+      await administradoraService.update({
+        id: dados.id,
+        nomeFantasia: dados.nomeFantasia,
+        cnpjEmpresa: dados.cnpjEmpresa,
+        cnpjDono: dados.cnpjDono,
+        ativo: dados.ativo,
+      })
+    } else {
+      await administradoraService.create({
+        nomeFantasia: dados.nomeFantasia,
+        cnpjEmpresa: dados.cnpjEmpresa,
+        cnpjDono: dados.cnpjDono,
+      })
+    }
+
+    modalAberto.value = false
+    await t()
+  } catch (error) {
+    console.error('Erro ao salvar administradora:', error)
+  } finally {
+    salvandoDados.value = false
+  }
 }
 
 onMounted(() => {

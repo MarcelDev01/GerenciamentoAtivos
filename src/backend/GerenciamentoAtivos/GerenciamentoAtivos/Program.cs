@@ -32,6 +32,7 @@ builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 builder.Services.AddScoped<IAtivoRepository, AtivoRepository>();
 builder.Services.AddScoped<ISegmentoRepository, SegmentoRepository>();
 builder.Services.AddScoped<IAdministradoraRepository, AdministradoraRepository>();
+builder.Services.AddScoped<ILookupRepository, LookupRepository>();
 
 builder.Services.AddApplicationServices();
 

@@ -12,7 +12,7 @@
         id="nome"
         v-model="form.nome"
         label="Nome"
-        placeholder="Ex: Fundos Imobiliários"
+        placeholder="Nome do segmento"
         :required="true"
         :autofocus="true"
         :error="submitted && !form.nome"
@@ -92,7 +92,11 @@ watch(
         }
         isEdit.value = true
       } else {
-        form.value = { id: null, nome: '', ativo: true }
+        form.value = {
+          id: null,
+          nome: '',
+          ativo: true,
+        }
         isEdit.value = false
       }
     }

@@ -36,6 +36,18 @@ export interface AtualizarAtivoDto {
   valorPatrimonial: number
   ativo: boolean
 }
+
+export interface AtivoForm {
+  id?: string | null
+  segmentoId: string
+  administradoraId: string
+  codigoFii: string
+  qtdeCotas: number
+  rendimentoUnitario: number
+  precoCota: number
+  valorPatrimonial: number
+  ativo: boolean
+}
 //#endregion
 
 export const ativoService = {
