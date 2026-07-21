@@ -25,7 +25,7 @@
       :columns="colunasSegmentos"
       @edit="editar"
       @delete="excluir"
-      :hasActions="false"
+      :hasActions="true"
     >
       <template #col-ativo="{ row }">
         <Badge
@@ -84,13 +84,21 @@ const openNewSegmento = () => {
   modalAberto.value = true
 }
 
-const editar = (item: any) => {
-  segmentoSelecionado.value = { ...item }
+const editar = async (item: SegmentoDto) => {
+  segmentoSelecionado.value = await segmentoService.getById(item.id)
   modalAberto.value = true
 }
 
-const excluir = (item: any) => {
-  console.log('Excluir segmento:', item)
+const excluir = async (id: string) => {
+  salvandoDados.value = true
+  try {
+    await segmentoService.delete(id)
+    await getSegmentos()
+  } catch (error) {
+    console.error('Erro ao excluir segmento:', error)
+  } finally {
+    salvandoDados.value = false
+  }
 }
 
 const saveSegmento = async (dados: SegmentoForm) => {

@@ -8,7 +8,9 @@ namespace GerenciamentoAtivos.Service.DTO_s.Ativo
     {
         public Guid Id { get; set; }
         public Guid SegmentoId { get; set; }
+        public string Segmento { get; set; } = string.Empty;
         public Guid AdministradoraId { get; set; }
+        public string Administradora { get; set; } = string.Empty;
         public string CodigoFII { get; set; } = string.Empty;
         public int QtdeCotas { get; set; }
         public decimal RendimentoUnitario { get; set; }

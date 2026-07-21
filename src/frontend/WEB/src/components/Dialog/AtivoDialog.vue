@@ -4,79 +4,95 @@
     :header="isEdit ? 'Editar Ativo' : 'Novo Ativo'"
     :modal="true"
     :draggable="false"
-    class="w-full max-w-md mx-4"
+    class="w-full max-w-3xl mx-4"
     @hide="onClose"
   >
-    <div class="flex flex-col gap-4 pt-2">
-      <BaseSelect
-        v-model="form.segmentoId"
-        label="Segmento"
-        placeholder="Selecione o segmento..."
-        :options="listaSegmentos"
-        option-label="nome"
-        option-value="id"
-      />
+    <div class="grid grid-cols-12 gap-4 pt-2">
+      <div class="col-span-12 sm:col-span-6">
+        <BaseSelect
+          v-model="form.segmentoId"
+          label="Segmento"
+          placeholder="Selecione o segmento..."
+          :options="listaSegmentos"
+          option-label="nome"
+          option-value="id"
+        />
+      </div>
 
-      <BaseSelect
-        v-model="form.administradoraId"
-        label="Administradora"
-        placeholder="Selecione a administradora..."
-        :options="listaAdministradoras"
-        option-label="nome"
-        option-value="id"
-      />
+      <div class="col-span-12 sm:col-span-6">
+        <BaseSelect
+          v-model="form.administradoraId"
+          label="Administradora"
+          placeholder="Selecione a administradora..."
+          :options="listaAdministradoras"
+          option-label="nome"
+          option-value="id"
+        />
+      </div>
 
-      <BaseInputText
-        id="codigoFii"
-        v-model="form.codigoFii"
-        label="Código FII"
-        :required="true"
-        :autofocus="true"
-        :error="submitted && !form.codigoFii"
-        error-message="O Campo Código FII é Obrigatório."
-      />
+      <div class="col-span-12 sm:col-span-4">
+        <BaseInputText
+          id="codigoFii"
+          v-model="form.codigoFii"
+          label="Código FII"
+          :required="true"
+          :autofocus="true"
+          :error="submitted && !form.codigoFii"
+          error-message="O Campo Código FII é Obrigatório."
+        />
+      </div>
 
-      <BaseInputText
-        id="qtdeCotas"
-        v-model="form.qtdeCotas"
-        label="Quantidade de Cotas"
-        :required="true"
-        :autofocus="true"
-        :error="submitted && !form.qtdeCotas"
-        error-message="O Campo Quantidade de Cotas é Obrigatório."
-      />
+      <div class="col-span-12 sm:col-span-4">
+        <BaseInputText
+          id="qtdeCotas"
+          v-model="form.qtdeCotas"
+          label="Quantidade de Cotas"
+          :required="true"
+          :autofocus="true"
+          :error="submitted && !form.qtdeCotas"
+          error-message="O Campo Quantidade de Cotas é Obrigatório."
+        />
+      </div>
 
-      <BaseInputText
-        id="rendimentoUnitario"
-        v-model="form.rendimentoUnitario"
-        label="Rendimento Unitário"
-        :required="true"
-        :autofocus="true"
-        :error="submitted && !form.rendimentoUnitario"
-        error-message="O Campo Rendimento Unitário é Obrigatório."
-      />
+      <div class="col-span-12 sm:col-span-4">
+        <BaseInputText
+          id="rendimentoUnitario"
+          v-model="form.rendimentoUnitario"
+          label="Rendimento Unitário"
+          :required="true"
+          :autofocus="true"
+          :error="submitted && !form.rendimentoUnitario"
+          error-message="O Campo Rendimento Unitário é Obrigatório."
+        />
+      </div>
 
-      <BaseInputText
-        id="precoCota"
-        v-model="form.precoCota"
-        label="Preço da Cota"
-        :required="true"
-        :autofocus="true"
-        :error="submitted && !form.precoCota"
-        error-message="O Campo Preço da Cota é Obrigatório."
-      />
+      <div class="col-span-12 sm:col-span-6">
+        <BaseInputText
+          id="precoCota"
+          v-model="form.precoCota"
+          label="Preço da Cota"
+          :required="true"
+          :autofocus="true"
+          :error="submitted && !form.precoCota"
+          error-message="O Campo Preço da Cota é Obrigatório."
+        />
+      </div>
 
-      <BaseInputText
-        id="valorPatrimonial"
-        v-model="form.valorPatrimonial"
-        label="Valor Patrimonial"
-        :required="true"
-        :autofocus="true"
-        :error="submitted && !form.valorPatrimonial"
-        error-message="O Campo Valor Patrimonial é Obrigatório."
-      />
+      <div class="col-span-12 sm:col-span-6">
+        <BaseInputText
+          id="valorPatrimonial"
+          v-model="form.valorPatrimonial"
+          label="Valor Patrimonial"
+          :required="true"
+          :autofocus="true"
+          :error="submitted && !form.valorPatrimonial"
+          error-message="O Campo Valor Patrimonial é Obrigatório."
+        />
+      </div>
 
-      <BaseInputSwitch v-if="isEdit" id="ativo" v-model="form.ativo" label="Ativo" />
+      <div class="col-span-12 sm:col-span-12">
+        <BaseInputSwitch v-if="isEdit" id="ativo" v-model="form.ativo" label="Ativo" />
+      </div>
     </div>
 
     <template #footer>
@@ -113,13 +129,13 @@ import { lookupService, type LookupDto } from '@/services/LookupService.ts'
 
 interface Props {
   visible: boolean
-  ativoForm?: AtivoForm | null
+  ativoData?: AtivoForm | null
   loading?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   visible: false,
-  ativoForm: null,
+  ativoData: null,
   loading: false,
 })
 
@@ -141,9 +157,9 @@ const form = ref<AtivoForm>({
   administradoraId: '',
   codigoFii: '',
   qtdeCotas: 0,
-  rendimentoUnitario: 0,
-  precoCota: 0,
-  valorPatrimonial: 0,
+  rendimentoUnitario: 0.0,
+  precoCota: 0.0,
+  valorPatrimonial: 0.0,
   ativo: true,
 })
 
@@ -153,17 +169,17 @@ watch(
     isOpen.value = newVal
     if (newVal) {
       submitted.value = false
-      if (props.ativoForm) {
+      if (props.ativoData) {
         form.value = {
-          id: props.ativoForm.id,
-          segmentoId: props.ativoForm.segmentoId,
-          administradoraId: props.ativoForm.administradoraId,
-          codigoFii: props.ativoForm.codigoFii,
-          qtdeCotas: props.ativoForm.qtdeCotas,
-          rendimentoUnitario: props.ativoForm.rendimentoUnitario,
-          precoCota: props.ativoForm.precoCota,
-          valorPatrimonial: props.ativoForm.valorPatrimonial,
-          ativo: props.ativoForm.ativo,
+          id: props.ativoData.id,
+          segmentoId: props.ativoData.segmentoId,
+          administradoraId: props.ativoData.administradoraId,
+          codigoFii: props.ativoData.codigoFII,
+          qtdeCotas: props.ativoData.qtdeCotas,
+          rendimentoUnitario: props.ativoData.rendimentoUnitario,
+          precoCota: props.ativoData.precoCota,
+          valorPatrimonial: props.ativoData.valorPatrimonial,
+          ativo: props.ativoData.ativo,
         }
         isEdit.value = true
       } else {

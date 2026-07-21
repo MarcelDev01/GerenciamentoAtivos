@@ -36,6 +36,7 @@ interface Props {
   loading?: boolean
   disabled?: boolean
   customClass?: string
+  rounded?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -47,16 +48,20 @@ const props = withDefaults(defineProps<Props>(), {
   loading: false,
   disabled: false,
   customClass: '',
+  rounded: false,
 })
 
 const getSizeClass = computed(() => {
+  const borderRounding = props.rounded ? '!rounded-full' : ''
+
   const sizes = {
-    'x-small': 'px-2 py-1 text-xs rounded-md',
-    small: 'px-3 py-1.5 text-sm rounded-md',
-    default: 'px-4 py-2.5 text-sm rounded-lg',
-    large: 'px-5 py-3 text-base rounded-lg',
-    'x-large': 'px-6 py-4 text-lg rounded-xl',
+    'x-small': `px-2.5 py-1 text-xs ${borderRounding || 'rounded-md'}`,
+    small: `px-3 py-1.5 text-sm ${borderRounding || 'rounded-md'}`,
+    default: `px-4 py-2.5 text-sm ${borderRounding || 'rounded-lg'}`,
+    large: `px-5 py-3 text-base ${borderRounding || 'rounded-lg'}`,
+    'x-large': `px-6 py-4 text-lg ${borderRounding || 'rounded-xl'}`,
   }
+
   return sizes[props.size] || sizes.default
 })
 

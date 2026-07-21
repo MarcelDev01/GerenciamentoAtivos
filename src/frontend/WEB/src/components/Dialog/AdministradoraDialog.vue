@@ -31,13 +31,13 @@
       />
 
       <BaseInputText
-        id="cnpjDono"
+        id="cnpjFundo"
         label="CNPJ"
-        v-model="form.cnpjDono"
+        v-model="form.cnpjFundo"
         placeholder="CNPJ"
         :required="true"
         :autofocus="true"
-        :error="submitted && !form.cnpjDono"
+        :error="submitted && !form.cnpjFundo"
         error-message="O Campo CNPJ é Obrigatório."
       />
 
@@ -98,7 +98,7 @@ const form = ref<AdministradoraForm>({
   id: null,
   nomeFantasia: '',
   cnpjEmpresa: '',
-  cnpjDono: '',
+  cnpjFundo: '',
   ativo: true,
 })
 
@@ -113,7 +113,7 @@ watch(
           id: props.administradoraData.id,
           nomeFantasia: props.administradoraData.nomeFantasia,
           cnpjEmpresa: props.administradoraData.cnpjEmpresa,
-          cnpjDono: props.administradoraData.cnpjDono,
+          cnpjFundo: props.administradoraData.cnpjFundo,
           ativo: props.administradoraData.ativo,
         }
         isEdit.value = true
@@ -122,7 +122,7 @@ watch(
           id: null,
           nomeFantasia: '',
           cnpjEmpresa: '',
-          cnpjDono: '',
+          cnpjFundo: '',
           ativo: true,
         }
         isEdit.value = false
@@ -141,7 +141,7 @@ const onClose = () => {
 
 const handleSave = () => {
   submitted.value = true
-  if (!form.value.nomeFantasia || !form.value.cnpjEmpresa || !form.value.cnpjDono) {
+  if (!form.value.nomeFantasia || !form.value.cnpjEmpresa || !form.value.cnpjFundo) {
     return
   }
   emit('save', { ...form.value })

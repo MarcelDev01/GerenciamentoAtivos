@@ -61,30 +61,38 @@
         }"
       >
         <template #body="slotProps">
-          <div class="flex items-center justify-center gap-1.5">
+          <div class="flex items-center justify-center gap-1">
             <slot name="actions" :row="slotProps.data">
-              <Button
-                icon="pi pi-pencil"
-                class="p-button-rounded p-button-text text-amber-600 hover:bg-amber-50! w-8 h-8 p-0"
+              <BaseButton
+                rounded
+                size="x-small"
+                severity="primary"
+                icon="mdi mdi-pencil"
                 @click="$emit('edit', slotProps.data)"
               />
-              <Button
-                icon="pi pi-trash"
-                class="p-button-rounded p-button-text text-red-600 hover:bg-red-50! w-8 h-8 p-0"
-                @click="$emit('delete', slotProps.data)"
+              <BaseButton
+                rounded
+                size="x-small"
+                severity="danger"
+                icon="mdi mdi-delete"
+                @click="openDialogConfirmation(slotProps.data)"
               />
             </slot>
           </div>
         </template>
       </Column>
     </DataTable>
+
+    <ConfirmDeleteDialog v-model:visible="openModal" @save="$emit('delete', data)" />
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
-import Button from 'primevue/button'
+import BaseButton from '../components/BaseButton.vue'
+import ConfirmDeleteDialog from '../components/Dialog/ConfirmDeleteDialog.vue'
 
 interface TableColumn {
   field: string
@@ -112,6 +120,14 @@ withDefaults(defineProps<Props>(), {
 
 defineEmits<{
   (e: 'edit', item: any): void
-  (e: 'delete', item: any): void
+  (e: 'delete', item: string): void
 }>()
+
+const openModal = ref(false)
+const data = ref('')
+
+const openDialogConfirmation = (item: any) => {
+  data.value = item.id
+  openModal.value = true
+}
 </script>

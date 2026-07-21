@@ -5,6 +5,8 @@ export interface AtivoDto {
   id: string
   segmentoId: string
   administradoraId: string
+  segmento: string
+  administradora: string
   codigoFii: string
   qtdeCotas: number
   rendimentoUnitario: number

@@ -21,7 +21,7 @@
       :columns="colunasAtivos"
       @edit="editar"
       @delete="excluir"
-      :hasActions="false"
+      :hasActions="true"
     >
       <template #col-ativo="{ row }">
         <Badge
@@ -71,6 +71,8 @@ const getAtivos = async () => {
 
 // Defina quais colunas essa tela precisa mostrar
 const colunasAtivos = [
+  { field: 'segmento', header: 'Segmento' },
+  { field: 'administradora', header: 'Administradora' },
   { field: 'codigoFII', header: 'Código FII' },
   { field: 'qtdeCotas', header: 'Qtde. Cotas' },
   { field: 'rendimentoUnitario', header: 'Rendimento Unitário' },
@@ -84,12 +86,22 @@ const openNewAtivo = () => {
   modalAberto.value = true
 }
 
-const editar = (item: any) => {
-  console.log('Editando ativo:', item)
+const editar = async (item: AtivoDto) => {
+  ativoSelecionado.value = await ativoService.getById(item.id)
+  console.log(ativoSelecionado.value)
+  modalAberto.value = true
 }
 
-const excluir = (item: any) => {
-  console.log('Excluindo ativo:', item)
+const excluir = async (id: string) => {
+  salvandoDados.value = true
+  try {
+    await ativoService.delete(id)
+    await getAtivos()
+  } catch (error) {
+    console.error('Erro ao excluir ativo:', error)
+  } finally {
+    salvandoDados.value = false
+  }
 }
 
 const saveAtivo = async (dados: AtivoForm) => {

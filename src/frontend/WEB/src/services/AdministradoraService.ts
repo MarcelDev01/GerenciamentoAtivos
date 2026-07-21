@@ -5,7 +5,7 @@ export interface AdministradoraDto {
   id: string
   nomeFantasia: string
   cnpjEmpresa: string
-  cnpjDono: string
+  cnpjFundo: string
   ativo: boolean
   created: string
   updated?: string
@@ -14,14 +14,14 @@ export interface AdministradoraDto {
 export interface CriarAdministradoraDto {
   nomeFantasia: string
   cnpjEmpresa: string
-  cnpjDono: string
+  cnpjFundo: string
 }
 
 export interface AtualizarAdministradoraDto {
   id: string
   nomeFantasia: string
   cnpjEmpresa: string
-  cnpjDono: string
+  cnpjFundo: string
   ativo: boolean
 }
 
@@ -29,7 +29,7 @@ export interface AdministradoraForm {
   id?: string | null
   nomeFantasia: string
   cnpjEmpresa: string
-  cnpjDono: string
+  cnpjFundo: string
   ativo: boolean
 }
 //#endregion

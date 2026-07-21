@@ -13,7 +13,7 @@ namespace GerenciamentoAtivos.Service.Services
         {
             IEnumerable<AtivoDto> lstAtivos = [];
 
-            var ativos = await _ativoRepository.GetAllAsync();
+            var ativos = await _ativoRepository.GetAllAtivosAsync();
 
             lstAtivos = ativos.Select(a => new AtivoDto
             {
@@ -27,7 +27,9 @@ namespace GerenciamentoAtivos.Service.Services
                 ValorPatrimonial = a.ValorPatrimonial,
                 Ativo = a.Active,
                 Created = a.Created,
-                Updated = a.Updated
+                Updated = a.Updated,
+                Segmento = a.Segmento.Nome,
+                Administradora = a.Administradora.Nome
             }).ToList();
 
             return lstAtivos;
@@ -35,7 +37,7 @@ namespace GerenciamentoAtivos.Service.Services
 
         public async Task<AtivoDto> AtivoById(Guid id)
         {
-            var ativo = await _ativoRepository.GetByIdAsync(id);
+            var ativo = await _ativoRepository.GetByIdAtivoAsync(id);
 
             AtivoDto ativoDto = new()
             {
@@ -49,7 +51,9 @@ namespace GerenciamentoAtivos.Service.Services
                 ValorPatrimonial = ativo.ValorPatrimonial,
                 Ativo = ativo.Active,
                 Created = ativo.Created,
-                Updated = ativo.Updated
+                Updated = ativo.Updated,
+                Segmento = ativo.Segmento.Nome,
+                Administradora = ativo.Administradora.Nome
             };
 
             return ativoDto;

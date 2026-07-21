@@ -28,7 +28,7 @@
       :columns="colunasAdministradoras"
       @edit="editar"
       @delete="excluir"
-      :hasActions="false"
+      :hasActions="true"
     >
       <template #col-ativo="{ row }">
         <Badge
@@ -72,7 +72,6 @@ const getAdministradoras = async () => {
   try {
     const result = await administradoraService.getAll()
     lstAdministradoras.value = result
-    console.log(lstAdministradoras.value)
   } catch (error) {
     console.error('Erro ao buscar administradoras:', error)
   } finally {
@@ -93,12 +92,21 @@ const openNewAdministradora = () => {
   modalAberto.value = true
 }
 
-const editar = (item: any) => {
-  console.log('Editando administradora:', item)
+const editar = async (item: AdministradoraDto) => {
+  administradoraSelecionada.value = await administradoraService.getById(item.id)
+  modalAberto.value = true
 }
 
-const excluir = (item: any) => {
-  console.log('Excluindo administradora:', item)
+const excluir = async (id: string) => {
+  salvandoDados.value = true
+  try {
+    await administradoraService.delete(id)
+    await getAdministradoras()
+  } catch (error) {
+    console.error('Erro ao excluir administradora:', error)
+  } finally {
+    salvandoDados.value = false
+  }
 }
 
 const saveAdministradora = async (dados: AdministradoraForm) => {
@@ -109,19 +117,19 @@ const saveAdministradora = async (dados: AdministradoraForm) => {
         id: dados.id,
         nomeFantasia: dados.nomeFantasia,
         cnpjEmpresa: dados.cnpjEmpresa,
-        cnpjDono: dados.cnpjDono,
+        cnpjFundo: dados.cnpjFundo,
         ativo: dados.ativo,
       })
     } else {
       await administradoraService.create({
         nomeFantasia: dados.nomeFantasia,
         cnpjEmpresa: dados.cnpjEmpresa,
-        cnpjDono: dados.cnpjDono,
+        cnpjFundo: dados.cnpjFundo,
       })
     }
 
     modalAberto.value = false
-    await t()
+    await getAdministradoras()
   } catch (error) {
     console.error('Erro ao salvar administradora:', error)
   } finally {

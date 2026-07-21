@@ -15,8 +15,8 @@ namespace GerenciamentoAtivos.Domain.Models
         [NotMapped]
         public string Nome
         {
-            get => NomeFantasia;
-            set => NomeFantasia = value;
+            get => CnpjEmpresa;
+            set => CnpjEmpresa = value;
         }
     }
 }

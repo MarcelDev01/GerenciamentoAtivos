@@ -7,5 +7,7 @@ namespace GerenciamentoAtivos.Domain.Interfaces
 {
     public interface IAtivoRepository : IBaseRepository<Ativo>
     {
+        Task<IEnumerable<Ativo>> GetAllAtivosAsync();
+        Task<Ativo?> GetByIdAtivoAsync(Guid id);
     }
 }
